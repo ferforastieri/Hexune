@@ -42,6 +42,7 @@ const navLinks = [
   { text: 'Artigos', href: '#articles' },
   { text: 'Sobre', href: '#about' },
   { text: 'Habilidades', href: '#skills' },
+  { text: 'Curriculo', href: '#curriculo' },
   { text: 'Projetos', href: '#projects' },
   { text: 'Contato', href: '#contact' }
 ]
