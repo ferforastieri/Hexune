@@ -7,14 +7,14 @@
           <span class="title-line highlight">Fernando</span>
         </h1>
         <div class="hero-roles">
-          <span class="role">Desenvolvedor</span>
-          <span class="role">Designer</span>
-          <span class="role">Criativo</span>
+          <span class="role">Frontend Developer</span>
+          <span class="role">DevOps Engineer</span>
+          <span class="role">Hardware Enthusiast</span>
         </div>
         <p class="hero-description">
           Transformando ideias em experiências digitais memoráveis. 
-          Combinando desenvolvimento, design e criatividade para criar 
-          soluções únicas e impactantes.
+          Combinando desenvolvimento, infraestrutura e hardware para criar 
+          soluções completas e impactantes.
         </p>
         <div class="hero-buttons">
           <a href="#projects" class="btn btn-primary">Ver Projetos</a>
@@ -22,11 +22,25 @@
         </div>
       </div>
       <div class="hero-visual">
-        <div class="visual-container">
-          <div class="visual-element" v-for="(element, index) in visualElements" 
-               :key="index" 
-               :style="element.style">
-            <span class="element-text">{{ element.text }}</span>
+        <div class="skills-showcase">
+          <div class="flip-card" 
+               v-for="(skill, index) in skills" 
+               :key="index"
+               @click="flipCard(index)"
+               :class="{ 'is-flipped': flippedCards[index] }">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="skill-icon">
+                  <img :src="skill.icon" :alt="skill.name" />
+                </div>
+                <h3 class="skill-name">{{ skill.name }}</h3>
+                <p class="skill-preview">{{ skill.preview }}</p>
+                <div class="flip-hint">Clique para ver mais</div>
+              </div>
+              <div class="flip-card-back">
+                <SkillInteractions :skill-type="skill.type" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -35,30 +49,44 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
+import SkillInteractions from '../interactions/SkillInteractions.vue'
 
-const visualElements = ref([
-  { text: 'Code', style: { top: '10%', left: '20%', transform: 'rotate(-15deg)' } },
-  { text: 'Design', style: { top: '30%', right: '15%', transform: 'rotate(10deg)' } },
-  { text: 'Create', style: { bottom: '20%', left: '25%', transform: 'rotate(-5deg)' } },
-  { text: 'Innovate', style: { bottom: '40%', right: '20%', transform: 'rotate(15deg)' } }
-])
+const flippedCards = ref([false, false, false])
 
-onMounted(() => {
-  // Adiciona animação aos elementos visuais
-  const elements = document.querySelectorAll('.visual-element')
-  elements.forEach((element, index) => {
-    element.style.animation = `fadeIn 0.5s ease forwards ${index * 0.2}s`
-  })
-})
+const skills = [
+  {
+    name: 'Frontend',
+    type: 'frontend',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+    preview: 'Interfaces modernas e reativas'
+  },
+  {
+    name: 'DevOps',
+    type: 'devops',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+    preview: 'Infraestrutura e automação'
+  },
+  {
+    name: 'Hardware',
+    type: 'hardware',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg',
+    preview: 'Projetos de automação'
+  }
+]
+
+const flipCard = (index) => {
+  flippedCards.value[index] = !flippedCards.value[index]
+}
 </script>
 
 <style scoped>
 .hero {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  padding: 0 2rem;
+  flex-direction: column;
+  padding: 2rem;
+  padding-top: 6rem;
   position: relative;
   overflow: hidden;
 }
@@ -66,31 +94,36 @@ onMounted(() => {
 .hero-content {
   max-width: 1400px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
+  width: 100%;
 }
 
 .hero-text {
   position: relative;
   z-index: 2;
+  text-align: center;
+  margin-bottom: 4rem;
 }
 
 .hero-title {
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
+  align-items: center;
 }
 
 .title-line {
   display: block;
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.highlight {
-  color: var(--primary-color);
+.title-line.highlight {
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-roles {
@@ -98,10 +131,11 @@ onMounted(() => {
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .role {
-  background-color: var(--background-alt);
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
   border-radius: 2rem;
   font-size: 0.9rem;
@@ -109,68 +143,27 @@ onMounted(() => {
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  color: var(--text-color);
 }
 
 .role:hover {
-  background-color: var(--primary-color);
+  background: var(--gradient-primary);
   color: white;
   transform: translateY(-2px);
 }
 
 .hero-description {
   max-width: 600px;
-  margin-bottom: 3rem;
+  margin: 0 auto 3rem;
   font-size: clamp(1rem, 2vw, 1.1rem);
   line-height: 1.8;
-}
-
-.hero-visual {
-  position: relative;
-  height: 500px;
-}
-
-.visual-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.visual-element {
-  position: absolute;
-  background-color: white;
-  padding: 1rem 2rem;
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow-lg);
-  opacity: 0;
-  transform-origin: center;
-  transition: all 0.3s ease;
-}
-
-.visual-element:hover {
-  transform: scale(1.1) rotate(0deg) !important;
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.element-text {
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  color: var(--text-color);
 }
 
 .hero-buttons {
   display: flex;
   gap: 1.5rem;
+  justify-content: center;
 }
 
 .btn {
@@ -187,30 +180,13 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+  background: var(--gradient-primary);
   color: white;
   border: none;
 }
 
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
 .btn-primary:hover {
   transform: translateY(-2px);
-}
-
-.btn-primary:hover::before {
-  opacity: 1;
 }
 
 .btn-secondary {
@@ -227,7 +203,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+  background: var(--gradient-primary);
   border-radius: 0.5rem;
   z-index: -2;
 }
@@ -254,42 +230,143 @@ onMounted(() => {
   opacity: 0;
 }
 
+.hero-visual {
+  position: relative;
+  width: 100%;
+  margin-top: 4rem;
+  padding: 0 1rem;
+}
+
+.skills-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.flip-card {
+  background-color: transparent;
+  height: 400px;
+  perspective: 1000px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flip-card-front {
+  background-color: white;
+  color: var(--text-color);
+}
+
+.flip-card-back {
+  background-color: white;
+  color: var(--text-color);
+  transform: rotateY(180deg);
+}
+
+.skill-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.flip-card:hover .skill-icon {
+  transform: scale(1.1);
+}
+
+.skill-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  margin-bottom: 0.5rem;
+}
+
+.skill-preview {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.flip-hint {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  opacity: 0.7;
+  margin-top: auto;
+}
+
 @media (max-width: 1024px) {
-  .hero-content {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 2rem;
+  .skills-showcase {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
   }
 
-  .hero-description {
-    margin: 0 auto 3rem;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-visual {
-    height: 400px;
-    margin-top: 2rem;
+  .flip-card {
+    height: 350px;
   }
 }
 
 @media (max-width: 768px) {
   .hero {
+    padding: 1rem;
     padding-top: 6rem;
   }
 
-  .hero-roles {
-    justify-content: center;
+  .hero-visual {
+    margin-top: 2rem;
+    padding: 0;
   }
 
-  .visual-element {
-    padding: 0.8rem 1.5rem;
+  .skills-showcase {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem;
   }
 
-  .element-text {
-    font-size: 1rem;
+  .flip-card {
+    height: 300px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .flip-card {
+    height: 250px;
   }
 }
 </style> 
