@@ -1,10 +1,10 @@
 # Portfolio Pessoal - Fer Tech
 
 ## 📋 Sobre o Projeto
-Este é um portfolio pessoal moderno e responsivo, desenvolvido para apresentar meus projetos, artigos e habilidades como desenvolvedor. O projeto utiliza Vue.js 3 com Composition API e segue as melhores práticas de desenvolvimento web.
+Este é um site de apresentacao para o futuro jogo chamado Hexune.
 
 ## 🎯 Objetivos
-- Apresentar meus projetos e habilidades de forma profissional
+- Apresentar o jogo
 - Compartilhar artigos e conhecimentos técnicos
 - Fornecer um meio de contato fácil e direto
 - Demonstrar boas práticas de desenvolvimento web
